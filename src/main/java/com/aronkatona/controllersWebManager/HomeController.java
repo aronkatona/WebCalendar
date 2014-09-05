@@ -1,6 +1,10 @@
 package com.aronkatona.controllersWebManager;
 
 import java.util.Locale;
+import java.util.Map;
+import java.util.Random;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -10,8 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import com.aronkatona.manager.MailManager;
 import com.aronkatona.manager.UserManager;
 import com.aronkatona.model.RegImage;
 import com.aronkatona.model.User;
@@ -23,13 +27,12 @@ import com.aronkatona.service.UserService;
 public class HomeController {
 
 	private UserManager userManager = new UserManager();
-	private MailManager mailManager = new MailManager();
 	private ServerThread serverThread = ServerThread.getInstance();
 	private RegImageService regImageService;
 
 	@Autowired
 	public void setMailService(JavaMailSender mailSender){
-		this.mailManager.setMailSender(mailSender);
+		this.userManager.setMailSender(mailSender);
 	}
 
 	@Autowired(required = true)
@@ -44,23 +47,23 @@ public class HomeController {
 	public void setRegImageService(RegImageService rs) {
 		this.regImageService = rs;
 	}
-
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
-		String image1 = this.regImageService.getRegImageById(1).getSourceName();
-		String image2 = this.regImageService.getRegImageById(2).getSourceName();
-		model.addAttribute("image1", image1);
-		model.addAttribute("image2", image2);
+	public String home(Locale locale, Model model,HttpSession session) {
+		model.addAttribute("successSignUp",session.getAttribute("successSignUp"));
+		session.setAttribute("successSignUp", "");
+		model.addAttribute("successLogin", session.getAttribute("successLogin"));
+		session.setAttribute("successLogin","");
+		
+		if(session.getAttribute("userName") == null){
+			session.setAttribute("userName", "");
+		}
+		
+		if(!session.getAttribute("userName").equals("") ){
+			return "redirect:/welcome";
+		}
+		
 		return "home";
-	}
-	
-	@RequestMapping(value ="/sendMail")
-	public String sendActivateMail(Locale locale, Model model){
-		
-		
-		
-		return "redirect:/";
 	}
 	
 	@RequestMapping(value="/activate.{activationString}")
@@ -69,6 +72,56 @@ public class HomeController {
 		return "redirect:/";
 	}
 	
+	@RequestMapping(value="/loginForm")
+	public String loginForm(){
+		return "login";
+	}
+	
+	@RequestMapping(value="/login", method = RequestMethod.GET)
+	public String login(Locale locale, Model model,HttpSession session,@RequestParam Map<String, String> reqPar){
+
+		User user = this.userManager.loginUser(reqPar);
+
+		if(user != null && session.getAttribute("userName").equals("")  ){
+			session.setAttribute("userName",  user.getName());
+			return "redirect:/welcome";
+		} 
+		else if(user != null && session.getAttribute("userName").equals(user.getName())){
+			session.setAttribute("userName", user.getName());
+			return "redirect:/welcome";
+		}
+		else if( !session.getAttribute("userName").equals("")){
+			session.setAttribute("successLogin", "alreadyIn");
+			return "redirect:/";
+		}		
+		else if( user == null){
+			session.setAttribute("successLogin", "notSuccessLogin");
+			return "redirect:/";	
+		} 
+		return "redirect:/";
+	}
+	
+	@RequestMapping(value="/signupForm")
+	public String signupForm(Model model){
+		Random random = new Random();	
+		final int sizeOfPictureList = 2;
+		RegImage regImage = this.regImageService.getRegImageById(random.nextInt(sizeOfPictureList)+1);
+		model.addAttribute("imageSource", regImage.getSourceName());
+		model.addAttribute("imageValue", regImage.getValue());
+		return "signup";
+	}
+	
+	@RequestMapping(value="/signup", method = RequestMethod.GET)
+	public String signup(Locale locale, Model model, @RequestParam Map<String,String> reqPar,HttpSession session){
+		
+		if(this.userManager.signUpUser(reqPar)){
+			session.setAttribute("successSignUp", "successSignUp");
+		} else{
+			session.setAttribute("successSignUp", "notSuccessSignUp");
+		}
+		
+		return "redirect:/";
+	}
 	
 	
 

@@ -37,7 +37,7 @@ public class User {
 		
 	}
 	
-	public User(String name, String password, String email){
+	public User(String name, String email, String password){
 		this.name = name;
 		this.password = password;
 		this.email = email;
@@ -101,6 +101,14 @@ public class User {
 
 	public void setRegistrationDate(Date registrationDate) {
 		this.registrationDate = registrationDate;
+	}
+	
+	@Override
+	public boolean equals(Object object){
+		if(object instanceof User){
+			return ((User) object).getId() == this.getId();
+		}
+		return false;
 	}
 
 	@Override

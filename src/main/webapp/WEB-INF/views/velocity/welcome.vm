@@ -1,0 +1,18 @@
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="./resources/js/checkEnemy.js"></script>
+	<title>welcome</title>
+</head>
+<body>
+Udv $userName
+<p>$test</p>
+#foreach($user in $activeUsers)
+	<p>$user.getName()</p>
+#end
+<a href="/controllersWebManager/welcome/listActiveUsers">list active users</a></br>
+
+<button id="checkButton">Check</button>
+
+</body>
+</html>

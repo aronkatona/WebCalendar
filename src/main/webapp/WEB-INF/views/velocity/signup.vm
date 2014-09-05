@@ -1,0 +1,24 @@
+<html>
+<script>
+var imageValue = $imageValue
+</script>
+<head>
+	<title>Signup</title>
+<script src="./resources/js/signUpCheck.js"></script>
+</head>
+<body>
+<h1>
+	Sign up
+</h1>
+
+<form name="signUpForm" action = "signup" method="get" onsubmit="return validateSignUpForm()" >
+	Username:	 	<input type="text" name="username" placeholder="username"><font id="userError1" size="3" color="red"></font></br>
+	E-mail: 		<input type="text" name="email" placeholder="email"><font id="userError2"	size="3" color="red"></font></br>
+	Password: 		<input type="password" id="passwordLogin" name="password1" placeholder="Password"/><br/> 
+	Password Again: <input type="password" id ="passwordLogin" name="password2" placeholder="Password again"></br>      
+    <img src="./resources/img/$imageSource" width = "100px"></img><input type="text" name="imageCheck"></br>
+<input type="submit" value="Sign up">
+</form>
+
+</body>
+</html>

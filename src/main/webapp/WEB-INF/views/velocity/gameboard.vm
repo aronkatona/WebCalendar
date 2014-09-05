@@ -1,0 +1,59 @@
+<html>
+<head>
+<script>
+var yourHp = $yourHp;
+var enemyHp = $enemyHp;
+function isOver(){
+ if(yourHp == 0){
+ 	alert("vesztettél");
+ }
+ if(enemyHp == 0){
+ 	alert("nyertél");
+ }
+}
+</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<title>gameTable</title>
+</head>
+#set($tableSize = $tableSize - 1)
+<body>
+<p><a href="/controllersWebManager/logout">logout</a></p>
+<p>yourhp: $yourHp </p>
+<p>enemyhp: $enemyHp</p>
+<table border="5" width="200" height="200">
+	#foreach($i in [0..$tableSize])
+	<tr>
+   		#foreach($j in [0..$tableSize])
+   			#if($gameTableMe[$i][$j] == "boat")
+   	  			<td bgcolor="blue"></td>
+   	  		#elseif($gameTableMe[$i][$j] == "destroyed")
+   	  			<td bgcolor="red"></td>
+   	  		#else
+   	  			<td></td>
+   	  		#end
+   	  	#end
+  	</tr>
+   	#end
+</table>
+
+
+<p>opponent</p>
+<table border="5" width="200" height="200">
+	#foreach($i in [0..$tableSize])
+	<tr>
+   		#foreach($j in [0..$tableSize])
+   	  		#if($gameTableOpponent[$i][$j] == "boat")
+   	  			<td bgcolor="blue"><a href="/controllersWebManager/welcome/shoot.$i.$j">X</a></td>
+   	  		#elseif($gameTableOpponent[$i][$j] == "destroyed")
+   	  			<td bgcolor="red"><a href="/controllersWebManager/welcome/shoot.$i.$j">X</a></td>
+   	  		#else
+   	  			<td><a href="/controllersWebManager/welcome/shoot.$i.$j">X</a></td>
+   	  		#end
+   	  	#end
+  	</tr>
+   	#end
+</table>
+
+
+</body>
+</html>

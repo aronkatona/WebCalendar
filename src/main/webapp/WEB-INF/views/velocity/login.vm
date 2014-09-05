@@ -1,0 +1,18 @@
+<html>
+<head>
+	<title>Login</title>
+</head>
+<body>
+<h1>
+	login
+</h1>
+
+<form name="loginForm" action = "login" method="get" >
+	Username:	 	<input type="text" name="username" placeholder="username"></br>
+	Password: <input type="password" id ="passwordLogin" name="password" placeholder="Password"></br>      
+    <input type="submit" id="login" value="Login"/>
+</form>
+
+
+</body>
+</html>

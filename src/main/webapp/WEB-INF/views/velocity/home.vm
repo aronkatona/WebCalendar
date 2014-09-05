@@ -4,13 +4,28 @@
 </head>
 <body>
 <h1>
-	Hello world!  
+	Hello
 </h1>
 
-<P>  The time on thes server is ${serverTime}. </P>
-<a href="sendMail">send mail</a>
+#if($successSignUp == "successSignUp")
+	<p>Sikeres regisztracio</p>
+#end
+#if($successSignUp == "notSuccessSignUp")
+	<p>Sikertelen regisztracio, mar van ilyen user</p>
+#end
 
-<img src="./resources/img/$image1" width = "100px"></img></br>
-<img src="./resources/img/$image2" width = "100px"></img></br>
+#if($successLogin == "notSuccessLogin")
+	<p>Nem sikerult bejelntkezni</p>
+#end
+
+#if($successLogin == "alreadyIn")
+	<p>Mar bevagy jelentkezve</p>
+#end
+
+
+<a href="loginForm">login</a></br>
+<a href="signupForm">signup</a>
+
+
 </body>
 </html>
